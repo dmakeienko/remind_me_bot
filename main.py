@@ -1,16 +1,25 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import datetime
+import json
 import logging
+from telegram import InlineQueryResultArticle, InputTextMessageContent
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
+
+# Dotenv
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 
 # Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 logger = logging.getLogger(__name__)
 
 
-TOKEN = ""
-TIME=datetime.datetime.now().time()
+TOKEN = os.environ.get("TELEGRAM_TOKEN")
 
 def start(bot, update):
   update.message.reply_text("I'm a bot, Nice to meet you!")
@@ -20,8 +29,15 @@ def convert_uppercase(bot, update):
 
 
 def time(bot, update):
-  update.message.reply_text(TIME)
+  current_time=datetime.datetime.now().strftime('%B %m, %A %H:%M')
+  update.message.reply_text(text="It's " + current_time)
 
+
+def unknown(bot, update):
+  bot.send_message(chat_id=update.message.chat_id, text="Sorry, I didn't understand that command.")
+
+
+  
 
 def main():
   # Create Updater object and attach dispatcher to it
@@ -37,6 +53,11 @@ def main():
 
   time_handler = CommandHandler('time',time)
   dispatcher.add_handler(time_handler)
+
+
+  # Always should be last
+  unknown_handler = MessageHandler(Filters.command, unknown)
+  dispatcher.add_handler(unknown_handler)
 
   # Start the bot
   updater.start_polling()
