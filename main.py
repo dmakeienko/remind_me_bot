@@ -24,23 +24,20 @@ TOKEN = os.environ.get("TELEGRAM_TOKEN")
 def start(bot, update):
   update.message.reply_text("I'm a bot, Nice to meet you!")
   
-def convert_uppercase(bot, update):
-  update.message.reply_text(update.message.text.upper())
-
 
 def time(bot, update):
   current_time=datetime.datetime.now().strftime('%B %m, %A %H:%M')
   update.message.reply_text(text="It's " + current_time)
 
 
-def get_remind(bot, update):
-  user_message = bot.send_message(chat_id=update.message.chat_id, text=update.message.text).split()
+def get_remind(bot, update, args):
+  user_message = ' '.join(args).split()
   day_remind = user_message[0]
   time_remind = user_message[1]
   reminder_text = user_message[2]
-  remind = "You will get remind about " + reminder_text + " at " + day_remind + time_remind
+  remind = "You will get remind about " + reminder_text + " at " + time_remind + ", " + day_remind
   bot.send_message(chat_id=update.message.chat_id, text=remind)
-
+  return day_remind, time_remind, reminder_text
 
 def unknown(bot, update):
   bot.send_message(chat_id=update.message.chat_id, text="Sorry, I didn't understand that command.")
@@ -61,7 +58,7 @@ def main():
   dispatcher.add_handler(start_handler)
 
   # Remind
-  get_remind_handler = MessageHandler(Filters.text, get_remind)
+  get_remind_handler = CommandHandler('remind', get_remind, pass_args=True)
   dispatcher.add_handler(get_remind_handler)
   
   # Time
