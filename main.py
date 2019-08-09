@@ -31,7 +31,7 @@ def time(bot, update):
 
 
 def get_remind(bot, update, args):
-  user_message = ' '.join(args).split()
+  user_message = ' '.join(args).split(" ", 2)
   day_remind = user_message[0]
   time_remind = user_message[1]
   reminder_text = user_message[2]
