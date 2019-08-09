@@ -6,10 +6,12 @@ services:
     restart: on-failure
     container_name: reminder_db
     environment:
-      POSTGRES_USER: reminder
-      POSTGRES_PASSWORD: reminder_pass
-      POSTGRES_DB: reminds_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - '5432:5432'
     volumes:
       - ./.postgres:/var/lib/postgresql/data
+    env_file: 
+      - ./.env
