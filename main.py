@@ -6,7 +6,7 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-import db
+from  db.database import create_remind, get_reminds
 
 # Dotenv
 dotenv_path = join(dirname(__file__), '.env')
@@ -37,7 +37,12 @@ def get_remind(bot, update, args):
   reminder_text = user_message[2]
   remind = "You will get remind about " + reminder_text + " at " + time_remind + ", " + day_remind
   bot.send_message(chat_id=update.message.chat_id, text=remind)
-  return day_remind, time_remind, reminder_text
+  create_remind(day_remind, time_remind, reminder_text, False)
+
+
+def list_reminds(bot, update):
+  bot.send_message(chat_id=update.message.chat_id, text=get_reminds())
+  
 
 def unknown(bot, update):
   bot.send_message(chat_id=update.message.chat_id, text="Sorry, I didn't understand that command.")
@@ -64,6 +69,11 @@ def main():
   # Time
   time_handler = CommandHandler('time',time)
   dispatcher.add_handler(time_handler)
+
+
+  # List
+  list_handler = CommandHandler('list', list_reminds)
+  dispatcher.add_handler(list_handler)
 
   # Always should be last
   unknown_handler = MessageHandler(Filters.command, unknown)
