@@ -34,7 +34,6 @@ class RemindEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Remind):
             return obj.__dict__
-        return json.JSONEncoder.default(self, obj)
 
 
 # Generate database schema
@@ -72,8 +71,8 @@ def delete_remind():
 
 def get_reminds():
     session = Session()
-    res = session.query(Remind).all()
+    reminds_list = session.query(Remind).all()
     
     # Close session
     session.close()
-    return json.dumps(res, cls=RemindEncoder)
+    return json.dumps(reminds_list, cls=RemindEncoder)
