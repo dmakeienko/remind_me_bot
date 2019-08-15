@@ -23,6 +23,7 @@ class Remind(Base):
     expired = Column(Boolean, default=False)
 
     def __init__(self, remind_day, remind_time, remind_text, expired):
+        # self.id = id
         self.remind_day = remind_day
         self.remind_time = remind_time
         self.remind_text = remind_text
@@ -72,7 +73,9 @@ def delete_remind():
 def get_reminds():
     session = Session()
     reminds_list = session.query(Remind).all()
-    
+    json_data = json.loads(json.dumps(reminds_list, cls=RemindEncoder, indent=4))
     # Close session
     session.close()
-    return json.dumps(reminds_list, cls=RemindEncoder)
+    # for r in json_data:
+    #     print(f"id: {r['id']}  {r['remind_text']}")
+    return json_data

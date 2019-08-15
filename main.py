@@ -41,7 +41,10 @@ def get_remind(bot, update, args):
 
 
 def list_reminds(bot, update):
-  bot.send_message(chat_id=update.message.chat_id, text=get_reminds())
+  for r in get_reminds():
+    print(f"id: {r['id']}  {r['remind_text']}")
+    my_reminds = "id: {r['id']}  {r['remind_text']}"
+  bot.send_message(chat_id=update.message.chat_id, text=my_reminds)
   
 
 def unknown(bot, update):
