@@ -6,7 +6,7 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-from  db.database import create_remind, get_reminds
+from  db.database import create_remind, get_reminds, expire_remind
 
 # Dotenv
 dotenv_path = join(dirname(__file__), '.env')
@@ -50,8 +50,11 @@ def list_reminds(bot, update):
 
 
 
-def delete_remind:
-  
+def delete_remind(bot, update, args):
+  expire_remind(args)
+  bot.send_message(chat_id=update.message.chat_id, text="Your remind has been deleted")
+
+
 
 def unknown(bot, update):
   bot.send_message(chat_id=update.message.chat_id, text="Sorry, I didn't understand that command.")
@@ -83,6 +86,12 @@ def main():
   # List
   list_handler = CommandHandler('list', list_reminds)
   dispatcher.add_handler(list_handler)
+
+
+  # Delete
+  delete_handler = CommandHandler('rm', delete_remind, pass_args=True)
+  dispatcher.add_handler(delete_handler)
+
 
   # Always should be last
   unknown_handler = MessageHandler(Filters.command, unknown)
