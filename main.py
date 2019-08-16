@@ -6,7 +6,7 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-
+from  db.database import create_remind, get_reminds
 
 # Dotenv
 dotenv_path = join(dirname(__file__), '.env')
@@ -14,7 +14,7 @@ load_dotenv(dotenv_path)
 
 
 # Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.ERROR)
 
 logger = logging.getLogger(__name__)
 
@@ -24,14 +24,28 @@ TOKEN = os.environ.get("TELEGRAM_TOKEN")
 def start(bot, update):
   update.message.reply_text("I'm a bot, Nice to meet you!")
   
-def convert_uppercase(bot, update):
-  update.message.reply_text(update.message.text.upper())
-
 
 def time(bot, update):
   current_time=datetime.datetime.now().strftime('%B %m, %A %H:%M')
   update.message.reply_text(text="It's " + current_time)
 
+
+def get_remind(bot, update, args):
+  user_message = ' '.join(args).split(" ", 2)
+  day_remind = user_message[0]
+  time_remind = user_message[1]
+  reminder_text = user_message[2]
+  remind = "You will get remind about " + reminder_text + " at " + time_remind + ", " + day_remind
+  bot.send_message(chat_id=update.message.chat_id, text=remind)
+  create_remind(day_remind, time_remind, reminder_text, False)
+
+
+def list_reminds(bot, update):
+  for r in get_reminds():
+    print(f"id: {r['id']}  {r['remind_text']}")
+    my_reminds = "id: {r['id']}  {r['remind_text']}"
+  bot.send_message(chat_id=update.message.chat_id, text=my_reminds)
+  
 
 def unknown(bot, update):
   bot.send_message(chat_id=update.message.chat_id, text="Sorry, I didn't understand that command.")
@@ -41,19 +55,28 @@ def unknown(bot, update):
 
 def main():
   # Create Updater object and attach dispatcher to it
-  updater = Updater(TOKEN)
+  updater = Updater(token=TOKEN)
   dispatcher = updater.dispatcher
   print("Bot started")
 
   # Add command handler to dispatcher
-  start_handler = CommandHandler('start',start)
-  upper_case = MessageHandler(Filters.text, convert_uppercase)
-  dispatcher.add_handler(start_handler)
-  dispatcher.add_handler(upper_case)
 
+  # Start
+  start_handler = CommandHandler('start',start)
+  dispatcher.add_handler(start_handler)
+
+  # Remind
+  get_remind_handler = CommandHandler('remind', get_remind, pass_args=True)
+  dispatcher.add_handler(get_remind_handler)
+  
+  # Time
   time_handler = CommandHandler('time',time)
   dispatcher.add_handler(time_handler)
 
+
+  # List
+  list_handler = CommandHandler('list', list_reminds)
+  dispatcher.add_handler(list_handler)
 
   # Always should be last
   unknown_handler = MessageHandler(Filters.command, unknown)
