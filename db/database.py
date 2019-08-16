@@ -41,7 +41,7 @@ class RemindEncoder(json.JSONEncoder):
 Base.metadata.create_all(engine)
 
 # Create new remind in DB
-def create_remind(day, time, text, expired):
+def create_remind(day, time, text, expired=False):
     # Create a new session
     session = Session()
 
@@ -61,10 +61,11 @@ def update_remind():
     session.close()
 
 
-def delete_remind():
+def delete_remind(id):
     session = Session()
 
-    
+    sesion.query(Remind).filter(Remind.id == id).update()
+
     # Commit and close session
     session.commit()
     session.close()
@@ -76,6 +77,4 @@ def get_reminds():
     json_data = json.loads(json.dumps(reminds_list, cls=RemindEncoder, indent=4))
     # Close session
     session.close()
-    # for r in json_data:
-    #     print(f"id: {r['id']}  {r['remind_text']}")
     return json_data
