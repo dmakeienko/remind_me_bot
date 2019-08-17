@@ -43,7 +43,8 @@ def get_remind(bot, update, args):
 
 def list_reminds(bot, update):
   my_reminds = ''
-  for r in get_reminds():
+  user_chat_id = update.message.chat_id
+  for r in get_reminds(user_chat_id):
     print(f"id: {r['id']}  {r['remind_text']}")
     my_reminds += f"id: {r['id']}  {r['remind_text']}\n"
 

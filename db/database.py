@@ -63,7 +63,6 @@ def update_remind():
 
 def expire_remind(delete_id):
     session = Session()
-    # delete_id_to_int = delete_id[0]
     session.query(Remind).filter_by(id=delete_id[0]).update({"expired": True}, synchronize_session=False)
 
     # Commit and close session
@@ -71,10 +70,10 @@ def expire_remind(delete_id):
     session.close()
 
 
-def get_reminds():
+def get_reminds(user_chat_id):
     session = Session()
-    # Select all reminds with expired == False
-    reminds_list = session.query(Remind).order_by(Remind.id).filter_by(expired=False).all()
+    # Select all reminds with expired == False, user is defined by chat_id
+    reminds_list = session.query(Remind).order_by(Remind.id).filter_by(expired=False).filter_by(chat_id=user_chat_id).all()
     json_data = json.loads(json.dumps(reminds_list, cls=RemindEncoder, indent=4))
     
     # Close session
