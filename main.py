@@ -30,7 +30,7 @@ def time(bot, update):
   update.message.reply_text(text="It's " + current_time)
 
 
-def get_remind(bot, update, args):
+def set_remind(bot, update, args):
   user_message = ' '.join(args).split(" ", 2)
   day_remind = user_message[0]
   time_remind = user_message[1]
@@ -77,8 +77,8 @@ def main():
   dispatcher.add_handler(start_handler)
 
   # Remind
-  get_remind_handler = CommandHandler('remind', get_remind, pass_args=True)
-  dispatcher.add_handler(get_remind_handler)
+  set_remind_handler = CommandHandler('remind', set_remind, pass_args=True)
+  dispatcher.add_handler(set_remind_handler)
   
   # Time
   time_handler = CommandHandler('time',time)
