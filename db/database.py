@@ -14,16 +14,16 @@ Base = declarative_base()
 
 
 class Remind(Base):
-# TODO add chat id
     __tablename__ = 'reminds'
     id = Column(Integer, primary_key=True)
+    chat_id = Column(Integer)
     remind_day = Column(String(10))
     remind_time = Column(String(8))
     remind_text = Column(String(100))
     expired = Column(Boolean, default=False)
 
-    def __init__(self, remind_day, remind_time, remind_text, expired):
-        # self.id = id
+    def __init__(self, chat_id, remind_day, remind_time, remind_text, expired):
+        self.chat_id = chat_id
         self.remind_day = remind_day
         self.remind_time = remind_time
         self.remind_text = remind_text
@@ -41,11 +41,11 @@ class RemindEncoder(json.JSONEncoder):
 Base.metadata.create_all(engine)
 
 # Create new remind in DB
-def create_remind(day, time, text, expired=False):
+def create_remind(chat_id, day, time, text, expired=False):
     # Create a new session
     session = Session()
 
-    remind = Remind(day, time, text, expired)
+    remind = Remind(chat_id, day, time, text, expired)
     session.add(remind)
     # Commit and close session
     session.commit()

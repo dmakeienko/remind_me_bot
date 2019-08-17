@@ -35,9 +35,10 @@ def get_remind(bot, update, args):
   day_remind = user_message[0]
   time_remind = user_message[1]
   reminder_text = user_message[2]
+  user_chat_id = update.message.chat_id
   remind = "You will get remind about " + reminder_text + " at " + time_remind + ", " + day_remind
-  bot.send_message(chat_id=update.message.chat_id, text=remind)
-  create_remind(day_remind, time_remind, reminder_text, False)
+  bot.send_message(chat_id=user_chat_id, text=remind)
+  create_remind(user_chat_id, day_remind, time_remind, reminder_text, False)
 
 
 def list_reminds(bot, update):
