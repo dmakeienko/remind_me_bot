@@ -4,13 +4,12 @@ import json
 import logging
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 import os
-from os.path import join, dirname
 from dotenv import load_dotenv
-from  db.database import create_remind, get_reminds, expire_remind
+from db.database import create_remind, get_reminds, expire_remind, check_remind
+from schedule.jobs import test
 
-# Dotenv
-dotenv_path = join(dirname(__file__), '.env')
-load_dotenv(dotenv_path)
+
+load_dotenv()
 
 
 # Enable logging
@@ -55,6 +54,14 @@ def delete_remind(bot, update, args):
   expire_remind(args)
   bot.send_message(chat_id=update.message.chat_id, text="Your remind has been deleted")
 
+
+def remind():
+  if check_remind:
+    for r in check_remind():
+      print(f"id: {r['id']}  {r['remind_text']}")
+      remind = f"Don`t forget: {r['remind_text']}\n"
+
+  bot.send_message(chat_id=update.message.chat_id, text=remind)
 
 
 def unknown(bot, update):

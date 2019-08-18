@@ -80,3 +80,20 @@ def get_reminds(user_chat_id):
     # Close session
     session.close()
     return json_data
+
+
+def check_remind():
+    session = Session()
+    current_time=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:00')
+    # current_time = '2019-08-20 23:15:00'
+    remind = session.query(Remind).filter_by(remind_time=current_time).filter_by(expired=False).all()
+
+    remind_j = json.loads(json.dumps(remind, cls=RemindEncoder, indent=4))
+    if remind_j: 
+        return(remind_j)
+
+    # Close session
+    session.close()
+
+
+check_remind()
