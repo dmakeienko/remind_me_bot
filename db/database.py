@@ -4,6 +4,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 import json
+import datetime 
+from dateutil.parser import parse
+
 
 load_dotenv()
 
@@ -17,14 +20,12 @@ class Remind(Base):
     __tablename__ = 'reminds'
     id = Column(Integer, primary_key=True)
     chat_id = Column(Integer)
-    remind_day = Column(String(10))
-    remind_time = Column(String(8))
+    remind_time = Column(String(20))
     remind_text = Column(String(100))
     expired = Column(Boolean, default=False)
 
-    def __init__(self, chat_id, remind_day, remind_time, remind_text, expired):
+    def __init__(self, chat_id, remind_time, remind_text, expired):
         self.chat_id = chat_id
-        self.remind_day = remind_day
         self.remind_time = remind_time
         self.remind_text = remind_text
         self.expired = expired
@@ -41,11 +42,11 @@ class RemindEncoder(json.JSONEncoder):
 Base.metadata.create_all(engine)
 
 # Create new remind in DB
-def create_remind(chat_id, day, time, text, expired=False):
+def create_remind(chat_id, time, text, expired=False):
     # Create a new session
     session = Session()
-
-    remind = Remind(chat_id, day, time, text, expired)
+    parsed_time = parse(time)
+    remind = Remind(chat_id, parsed_time, text, expired)
     session.add(remind)
     # Commit and close session
     session.commit()
