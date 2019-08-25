@@ -95,5 +95,3 @@ def check_remind():
     # Close session
     session.close()
 
-
-check_remind()

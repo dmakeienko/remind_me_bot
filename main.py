@@ -6,7 +6,7 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent
 import os
 from dotenv import load_dotenv
 from db.database import create_remind, get_reminds, expire_remind, check_remind
-from schedule.jobs import test
+from jobs.check import *
 
 
 load_dotenv()
@@ -55,7 +55,7 @@ def delete_remind(bot, update, args):
   bot.send_message(chat_id=update.message.chat_id, text="Your remind has been deleted")
 
 
-def remind():
+def remind(bot, update):
   if check_remind:
     for r in check_remind():
       print(f"id: {r['id']}  {r['remind_text']}")
