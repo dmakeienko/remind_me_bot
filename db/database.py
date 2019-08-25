@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import json
 import datetime 
 from dateutil.parser import parse
-
+# from actions.remind import remind
 
 load_dotenv()
 
@@ -90,8 +90,11 @@ def check_remind():
 
     remind_j = json.loads(json.dumps(remind, cls=RemindEncoder, indent=4))
     if remind_j: 
-        return(remind_j)
+        print(remind_j)
+        # remind()
 
     # Close session
     session.close()
 
+
+check_remind()

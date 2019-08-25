@@ -5,8 +5,9 @@ import logging
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 import os
 from dotenv import load_dotenv
-from db.database import create_remind, get_reminds, expire_remind, check_remind
+from db.database import create_remind, get_reminds, expire_remind
 from jobs.check import *
+from actions.remind import remind
 
 
 load_dotenv()
@@ -55,13 +56,13 @@ def delete_remind(bot, update, args):
   bot.send_message(chat_id=update.message.chat_id, text="Your remind has been deleted")
 
 
-def remind(bot, update):
-  if check_remind:
-    for r in check_remind():
-      print(f"id: {r['id']}  {r['remind_text']}")
-      remind = f"Don`t forget: {r['remind_text']}\n"
+# def remind(bot, update):
+#   if check_remind:
+#     for r in check_remind():
+#       print(f"id: {r['id']}  {r['remind_text']}")
+#       remind = f"Don`t forget: {r['remind_text']}\n"
 
-  bot.send_message(chat_id=update.message.chat_id, text=remind)
+#   bot.send_message(chat_id=update.message.chat_id, text=remind)
 
 
 def unknown(bot, update):
@@ -95,6 +96,9 @@ def main():
   list_handler = CommandHandler('list', list_reminds)
   dispatcher.add_handler(list_handler)
 
+  # Remind
+  remind_handler = MessageHandler(Filters.text, remind)
+  dispatcher.add_handler(remind_handler)
 
   # Delete
   delete_handler = CommandHandler('rm', delete_remind, pass_args=True)
