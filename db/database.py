@@ -90,8 +90,8 @@ def check_remind():
 
     remind_j = json.loads(json.dumps(remind, cls=RemindEncoder, indent=4))
     if remind_j: 
-        print(remind_j)
-        # remind()
+        # print(remind_j)
+        return remind_j
 
     # Close session
     session.close()

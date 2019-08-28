@@ -6,7 +6,7 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent
 import os
 from dotenv import load_dotenv
 from db.database import create_remind, get_reminds, expire_remind
-from jobs.check import *
+# from jobs.check import *
 from actions.remind import remind
 
 
@@ -77,6 +77,7 @@ def unknown(bot, update):
 def main():
   # Create Updater object and attach dispatcher to it
   updater = Updater(token=TOKEN)
+  j = updater.job_queue
   dispatcher = updater.dispatcher
   print("Bot started")
 
@@ -100,8 +101,9 @@ def main():
   dispatcher.add_handler(list_handler)
 
   # Remind
-  remind_handler = MessageHandler(Filters.text, remind)
-  dispatcher.add_handler(remind_handler)
+  j.run_repeating(remind, interval=60,  first=0)
+  # remind_handler = MessageHandler(Filters.text, remind)
+  # dispatcher.add_handler(remind_handler)
 
   # Delete
   delete_handler = CommandHandler('rm', delete_remind, pass_args=True)
