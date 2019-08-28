@@ -58,7 +58,7 @@ def create_remind(chat_id, time, text, expired=False, done=False):
 
 def update_remind():
     session = Session()
-
+    
     
     # Commit and close session
     session.commit()
@@ -106,6 +106,16 @@ def close_remind(user_chat_id):
     # TODO 
     # handle if there is no 'not done' reminds
     session.query(Remind).filter_by(id=last_remind_id.id).update({"done": True}, synchronize_session=False)
+
+    # Commit and close session
+    session.commit()
+    session.close()
+
+
+def delete_remind(delete_id):
+    session = Session()
+    for i in delete_id:
+        session.query(Remind).filter_by(id=i).delete(synchronize_session=False)
 
     # Commit and close session
     session.commit()
