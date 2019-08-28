@@ -43,9 +43,12 @@ def set_remind(bot, update, args):
 def list_reminds(bot, update):
   my_reminds = ''
   user_chat_id = update.message.chat_id
-  for r in get_reminds(user_chat_id):
-    print(f"id: {r['id']}  {r['remind_text']}")
-    my_reminds += f"id: {r['id']}  {r['remind_text']}\n"
+  if get_reminds(user_chat_id):
+    for r in get_reminds(user_chat_id):
+      print(f"id: {r['id']}  {r['remind_text']}")
+      my_reminds += f"id: {r['id']}  {r['remind_text']}\n"
+  else: 
+    my_reminds = 'Sorry, you have no reminds yet'
 
   bot.send_message(chat_id=update.message.chat_id, text=my_reminds)
 
