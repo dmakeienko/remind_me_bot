@@ -23,12 +23,15 @@ class Remind(Base):
     remind_time = Column(String(20))
     remind_text = Column(String(100))
     expired = Column(Boolean, default=False)
+    done = Column(Boolean, default=False)
 
-    def __init__(self, chat_id, remind_time, remind_text, expired):
+
+    def __init__(self, chat_id, remind_time, remind_text, expired, done):
         self.chat_id = chat_id
         self.remind_time = remind_time
         self.remind_text = remind_text
         self.expired = expired
+        self.done = done
 
 
 
@@ -42,11 +45,11 @@ class RemindEncoder(json.JSONEncoder):
 Base.metadata.create_all(engine)
 
 # Create new remind in DB
-def create_remind(chat_id, time, text, expired=False):
+def create_remind(chat_id, time, text, expired=False, done=False):
     # Create a new session
     session = Session()
     parsed_time = parse(time)
-    remind = Remind(chat_id, parsed_time, text, expired)
+    remind = Remind(chat_id, parsed_time, text, expired, done)
     session.add(remind)
     # Commit and close session
     session.commit()
@@ -85,16 +88,25 @@ def get_reminds(user_chat_id):
 def check_remind():
     session = Session()
     current_time=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:00')
-    # current_time = '2019-08-20 23:15:00'
     remind = session.query(Remind).filter_by(remind_time=current_time).filter_by(expired=False).all()
 
     remind_j = json.loads(json.dumps(remind, cls=RemindEncoder, indent=4))
     if remind_j: 
-        # print(remind_j)
         return remind_j
 
     # Close session
     session.close()
 
 
-check_remind()
+def close_remind(user_chat_id):
+    session = Session()
+    last_remind_id = session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(done=False).order_by(Remind.id).first()
+    print(last_remind_id.id)
+
+    # TODO 
+    # handle if there is no 'not done' reminds
+    session.query(Remind).filter_by(id=last_remind_id.id).update({"done": True}, synchronize_session=False)
+
+    # Commit and close session
+    session.commit()
+    session.close()

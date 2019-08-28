@@ -12,4 +12,3 @@ def remind(bot, job):
   else:
     return
 
-# j.run_repeatin(remind, interval=60,  first=0)
