@@ -59,9 +59,9 @@ def delete(bot, update, args):
   bot.send_message(chat_id=update.message.chat_id, text="Your remind(s) has been deleted")
 
 
-def close(bot, update):
+def close(bot, update, args):
   user_chat_id = update.message.chat_id
-  close_remind(user_chat_id)
+  close_remind(user_chat_id, args)
   bot.send_message(chat_id=update.message.chat_id, text="Your remind marked as Done!")
 
 
@@ -115,7 +115,7 @@ def main():
   dispatcher.add_handler(delete_handler)
 
   # Done
-  done_handler =  CommandHandler('done', close)
+  done_handler =  CommandHandler('done', close, pass_args=True)
   dispatcher.add_handler(done_handler)
 
   # Update

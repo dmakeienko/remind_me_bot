@@ -65,9 +65,6 @@ def update_remind(chat_id, id, time, text):
     session.close()
 
 
-# update_remind(chat_id=365899971, id=2, time='2019-08-30 22:22:00', text='change')
-
-
 def expire_remind(delete_id):
     session = Session()
     session.query(Remind).filter_by(id=delete_id[0]).update({"expired": True}, synchronize_session=False)
@@ -79,8 +76,8 @@ def expire_remind(delete_id):
 
 def get_reminds(user_chat_id):
     session = Session()
-    # Select all reminds with expired == False, user is defined by chat_id
-    reminds_list = session.query(Remind).order_by(Remind.id).filter_by(expired=False).filter_by(chat_id=user_chat_id).all()
+    # Select all reminds with done == False, user is defined by chat_id
+    reminds_list = session.query(Remind).order_by(Remind.id).filter_by(done=False).filter_by(chat_id=user_chat_id).all()
     json_data = json.loads(json.dumps(reminds_list, cls=RemindEncoder, indent=4))
     
     # Close session
@@ -101,15 +98,16 @@ def check_remind():
     session.close()
 
 
-def close_remind(user_chat_id):
+def close_remind(user_chat_id, id):
     session = Session()
-    last_remind_id = session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(done=False).order_by(Remind.id).first()
-    print(last_remind_id.id)
-
-    # TODO 
-    # handle if there is no 'not done' reminds
-    session.query(Remind).filter_by(id=last_remind_id.id).update({"done": True}, synchronize_session=False)
-
+    if not id:
+        remind_id = session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(done=False).order_by(Remind.id).first()
+        # TODO 
+        # handle if there is no 'not done' reminds
+        session.query(Remind).filter_by(id=remind_id.id).update({"done": True}, synchronize_session=False)
+    else:
+        for i in id:
+            session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(id=i).update({"done": True}, synchronize_session=False)
     # Commit and close session
     session.commit()
     session.close()
