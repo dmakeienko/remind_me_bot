@@ -58,7 +58,7 @@ def create_remind(chat_id, time, text, expired=False, done=False):
 
 def update_remind(chat_id, id, time, text):
     session = Session()
-    session.query(Remind).filter_by(chat_id=chat_id).filter_by(id=id).update({"remind_time": parse(time), "remind_text": text})
+    session.query(Remind).filter_by(chat_id=chat_id).filter_by(id=id).one().update({"remind_time": parse(time), "remind_text": text})
     
     # Commit and close session
     session.commit()
