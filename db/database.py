@@ -56,13 +56,16 @@ def create_remind(chat_id, time, text, expired=False, done=False):
     session.close()
 
 
-def update_remind():
+def update_remind(chat_id, id, time, text):
     session = Session()
-    
+    session.query(Remind).filter_by(chat_id=chat_id).filter_by(id=id).update({"remind_time": parse(time), "remind_text": text})
     
     # Commit and close session
     session.commit()
     session.close()
+
+
+# update_remind(chat_id=365899971, id=2, time='2019-08-30 22:22:00', text='change')
 
 
 def expire_remind(delete_id):
@@ -120,3 +123,4 @@ def delete_remind(delete_id):
     # Commit and close session
     session.commit()
     session.close()
+

@@ -5,7 +5,7 @@ import logging
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 import os
 from dotenv import load_dotenv
-from db.database import create_remind, get_reminds, expire_remind, close_remind, delete_remind
+from db.database import create_remind, get_reminds, expire_remind, close_remind, delete_remind, update_remind
 # from jobs.check import *
 from actions.remind import remind
 
@@ -65,6 +65,16 @@ def close(bot, update):
   bot.send_message(chat_id=update.message.chat_id, text="Your remind marked as Done!")
 
 
+def update(bot, update, args):
+    user_message = ' '.join(args).split(" ", 3)
+    remind_id=user_message[0]
+    time_remind = user_message[1] + " " + user_message[2]
+    reminder_text = user_message[3] 
+    user_chat_id = update.message.chat_id
+    update_remind(chat_id=user_chat_id, id=remind_id, time=time_remind, text=reminder_text)
+    bot.send_message(chat_id=update.message.chat_id, text="Your remind has been changed")
+
+
 def unknown(bot, update):
   bot.send_message(chat_id=update.message.chat_id, text="Sorry, I didn't understand that command.")
 
@@ -108,6 +118,9 @@ def main():
   done_handler =  CommandHandler('done', close)
   dispatcher.add_handler(done_handler)
 
+  # Update
+  update_remind_handler = CommandHandler('update', update, pass_args=True)
+  dispatcher.add_handler(update_remind_handler)
 
   # Always should be last
   unknown_handler = MessageHandler(Filters.command, unknown)
