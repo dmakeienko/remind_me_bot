@@ -6,9 +6,13 @@ from dotenv import load_dotenv
 import json
 import datetime 
 from dateutil.parser import parse
-# from actions.remind import remind
+import logging
+
 
 load_dotenv()
+
+logger = logging.getLogger('database')
+
 
 engine = create_engine(os.environ['DB_URL'])
 Session = sessionmaker(bind=engine)
@@ -46,6 +50,7 @@ Base.metadata.create_all(engine)
 
 # Create new remind in DB
 def create_remind(chat_id, time, text, expired=False, done=False):
+    logger.info("Creating remind...")
     # Create a new session
     session = Session()
     parsed_time = parse(time)
@@ -57,6 +62,7 @@ def create_remind(chat_id, time, text, expired=False, done=False):
 
 
 def update_remind(chat_id, id, time, text):
+    logger.info("Updating remind...")
     session = Session()
     session.query(Remind).filter_by(chat_id=chat_id).filter_by(id=id).one().update({"remind_time": parse(time), "remind_text": text})
     
@@ -75,6 +81,7 @@ def expire_remind(delete_id):
 
 
 def get_reminds(user_chat_id):
+    logger.info("Getting reminds...")
     session = Session()
     # Select all reminds with done == False, user is defined by chat_id
     reminds_list = session.query(Remind).order_by(Remind.id).filter_by(done=False).filter_by(chat_id=user_chat_id).all()
@@ -86,6 +93,7 @@ def get_reminds(user_chat_id):
 
 
 def check_remind():
+    logger.info("Checking reminds...")
     session = Session()
     current_time=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:00')
     remind = session.query(Remind).filter_by(remind_time=current_time).filter_by(expired=False).all()
@@ -99,6 +107,7 @@ def check_remind():
 
 
 def close_remind(user_chat_id, id):
+    logger.info("Closing reminds...")    
     session = Session()
     if not id:
         # TODO 
@@ -114,6 +123,7 @@ def close_remind(user_chat_id, id):
 
 
 def delete_remind(delete_id, chat_id):
+    logger.info("Deleting reminds...")
     session = Session()
     for i in delete_id:
         session.query(Remind).filter_by(id=i).filter_by(chat_id=chat_id).one().delete(synchronize_session=False)
