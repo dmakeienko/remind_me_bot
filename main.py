@@ -55,14 +55,23 @@ def list_reminds(bot, update):
 
 
 def delete(bot, update, args):
-  delete_remind(args)
-  bot.send_message(chat_id=update.message.chat_id, text="Your remind(s) has been deleted")
+  user_chat_id = update.message.chat_id
+  try:
+    delete_remind(args, user_chat_id)
+    bot.send_message(chat_id=update.message.chat_id, text="Your remind(s) has been deleted")
+  except:
+    bot.send_message(chat_id=update.message.chat_id, text="Sorry, there is no remind(s) with such id")
+
 
 
 def close(bot, update, args):
   user_chat_id = update.message.chat_id
-  close_remind(user_chat_id, args)
-  bot.send_message(chat_id=update.message.chat_id, text="Your remind marked as Done!")
+
+  if close_remind(user_chat_id, args) is not None:
+    bot.send_message(chat_id=update.message.chat_id, text="Your remind marked as Done!")
+  else:
+    bot.send_message(chat_id=update.message.chat_id, text="Sorry, there is no remind(s) with such id")
+
 
 
 def update(bot, update, args):

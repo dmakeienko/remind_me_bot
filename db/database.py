@@ -101,9 +101,9 @@ def check_remind():
 def close_remind(user_chat_id, id):
     session = Session()
     if not id:
-        remind_id = session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(done=False).order_by(Remind.id).first()
         # TODO 
-        # handle if there is no 'not done' reminds
+        # check if last remind_id exists
+        remind_id = session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(done=False).order_by(Remind.id).first()
         session.query(Remind).filter_by(id=remind_id.id).update({"done": True}, synchronize_session=False)
     else:
         for i in id:
@@ -113,10 +113,10 @@ def close_remind(user_chat_id, id):
     session.close()
 
 
-def delete_remind(delete_id):
+def delete_remind(delete_id, chat_id):
     session = Session()
     for i in delete_id:
-        session.query(Remind).filter_by(id=i).delete(synchronize_session=False)
+        session.query(Remind).filter_by(id=i).filter_by(chat_id=chat_id).one().delete(synchronize_session=False)
 
     # Commit and close session
     session.commit()
