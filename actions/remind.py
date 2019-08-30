@@ -12,3 +12,38 @@ def remind(bot, job):
   else:
     return
 
+
+def remind_1(bot, job):
+  if check_remind(1):
+    for r in check_remind(1):
+      print(f"id: {r['id']}  {r['remind_text']}")
+      remind = f"Don`t forget: {r['remind_text']}\n"
+      user_chat_id = r['chat_id']
+
+    bot.send_message(chat_id=user_chat_id, text=remind)
+  else:
+    return
+
+
+def remind_2(bot, job):
+  if check_remind(2):
+    for r in check_remind(2):
+      print(f"id: {r['id']}  {r['remind_text']}")
+      remind = f"Don`t forget: {r['remind_text']}\n"
+      user_chat_id = r['chat_id']
+
+    bot.send_message(chat_id=user_chat_id, text=remind)
+  else:
+    return
+
+
+def check_expired(bot, job):
+  if check_remind(4)[0] == 'expired':
+    for r in check_remind(4)[1]:
+      print(f"id: {r['id']}  {r['remind_text']}")
+      user_chat_id = r['chat_id']
+
+    final_remind= 'Sorry, your task expired'
+    bot.send_message(chat_id=user_chat_id, text=final_remind)
+  else:
+    return

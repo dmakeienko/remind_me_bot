@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 from db.database import create_remind, get_reminds, expire_remind, close_remind, delete_remind, update_remind
 # from jobs.check import *
-from actions.remind import remind
+from actions.remind import remind, remind_1
 
 
 load_dotenv()
@@ -67,9 +67,10 @@ def delete(bot, update, args):
 def close(bot, update, args):
   user_chat_id = update.message.chat_id
 
-  if close_remind(user_chat_id, args) is not None:
+  try: 
+    close_remind(user_chat_id, args)
     bot.send_message(chat_id=update.message.chat_id, text="Your remind marked as Done!")
-  else:
+  except:
     bot.send_message(chat_id=update.message.chat_id, text="Sorry, there is no remind(s) with such id")
 
 
@@ -120,7 +121,8 @@ def main():
   dispatcher.add_handler(list_handler)
 
   # Remind
-  j.run_repeating(remind, interval=60,  first=0)
+  j.run_repeating(remind, interval=20,  first=0)
+  j.run_repeating(remind_1, interval=20,  first=0)
 
   # Delete
   delete_handler = CommandHandler('rm', delete, pass_args=True)

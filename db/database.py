@@ -2,6 +2,7 @@ import os
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import desc
 from dotenv import load_dotenv
 import json
 import datetime 
@@ -73,7 +74,7 @@ def update_remind(chat_id, id, time, text):
 
 def expire_remind(delete_id):
     session = Session()
-    session.query(Remind).filter_by(id=delete_id[0]).update({"expired": True}, synchronize_session=False)
+    session.query(Remind).filter_by(id=delete_id).update({"expired": True}, synchronize_session=False)
 
     # Commit and close session
     session.commit()
@@ -84,7 +85,7 @@ def get_reminds(user_chat_id):
     logger.info("Getting reminds...")
     session = Session()
     # Select all reminds with done == False, user is defined by chat_id
-    reminds_list = session.query(Remind).order_by(Remind.id).filter_by(done=False).filter_by(chat_id=user_chat_id).all()
+    reminds_list = session.query(Remind).filter_by(chat_id=user_chat_id).order_by(Remind.id).filter_by(done=False).all()
     json_data = json.loads(json.dumps(reminds_list, cls=RemindEncoder, indent=4))
     
     # Close session
@@ -92,11 +93,23 @@ def get_reminds(user_chat_id):
     return json_data
 
 
-def check_remind():
+def check_remind(*time):
     logger.info("Checking reminds...")
     session = Session()
-    current_time=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:00')
-    remind = session.query(Remind).filter_by(remind_time=current_time).filter_by(expired=False).all()
+    datetimeFormat = '%Y-%m-%d %H:%M:00'
+    current_time=datetime.datetime.now().strftime(datetimeFormat)
+
+    if not time:
+        remind_time = current_time
+        remind = session.query(Remind).filter_by(remind_time=remind_time).filter_by(expired=False).filter_by(done=False).all()
+    elif time:
+        if time[0] < 3:
+            remind_time = (datetime.datetime.strptime(current_time, datetimeFormat) - datetime.timedelta(minutes=time[0])).strftime(datetimeFormat)
+            remind = session.query(Remind).filter_by(remind_time=remind_time).filter_by(expired=False).filter_by(done=False).all()
+        else:
+            remind_j = json.loads(json.dumps(remind, cls=RemindEncoder, indent=4))
+            expire_remind(remind.id)
+            return 'expired', remind_j
 
     remind_j = json.loads(json.dumps(remind, cls=RemindEncoder, indent=4))
     if remind_j: 
@@ -109,11 +122,15 @@ def check_remind():
 def close_remind(user_chat_id, id):
     logger.info("Closing reminds...")    
     session = Session()
+    datetimeFormat = '%Y-%m-%d %H:%M:00'
+    current_time=datetime.datetime.now().strftime(datetimeFormat)
     if not id:
         # TODO 
-        # check if last remind_id exists
-        remind_id = session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(done=False).order_by(Remind.id).first()
-        session.query(Remind).filter_by(id=remind_id.id).update({"done": True}, synchronize_session=False)
+        # check if last remind exists
+        remind = session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(done=False).filter(Remind.remind_time <= current_time).order_by(desc(Remind.remind_time)).first()
+        print(remind.id)
+        if remind is not None:
+            session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(id=remind.id).update({"done": True}, synchronize_session=False)
     else:
         for i in id:
             session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(id=i).update({"done": True}, synchronize_session=False)
