@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy import desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from utils.constants import DATETIME_FORMAT, EXPIRED_REMIND_TIME
+from utils.constants import DATETIME_FORMAT, LAST_REMIND_TIME
 import datetime 
 import json
 import logging
@@ -83,7 +83,7 @@ def check_remind(*time):
         remind_time = current_time
         remind = session.query(Remind).filter_by(remind_time=remind_time).filter_by(expired=False).filter_by(done=False).all()
     else:
-        if time[0] <= EXPIRED_REMIND_TIME:
+        if time[0] <= LAST_REMIND_TIME:
             remind_time = (datetime.datetime.strptime(current_time, DATETIME_FORMAT) - datetime.timedelta(minutes=time[0])).strftime(DATETIME_FORMAT)
             remind = session.query(Remind).filter_by(remind_time=remind_time).filter_by(expired=False).filter_by(done=False).all()
             logger.info("Checking NONEXPIRED...")
