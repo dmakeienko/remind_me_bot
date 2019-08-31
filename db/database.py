@@ -1,15 +1,15 @@
-import os
+from dateutil.parser import parse
+from db.Remind import Remind, Base
+from dotenv import load_dotenv
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
+from sqlalchemy import desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import desc
-from dotenv import load_dotenv
-import json
-import datetime 
-from dateutil.parser import parse
-import logging
-from db.Remind import Remind, Base
 from utils.constants import DATETIME_FORMAT, EXPIRED_REMIND_TIME
+import datetime 
+import json
+import logging
+import os
 
 load_dotenv()
 
@@ -30,7 +30,7 @@ class RemindEncoder(json.JSONEncoder):
 Base.metadata.create_all(engine)
 
 # Create new remind in DB
-def create_remind(chat_id, time, text, expired=False, done=False):
+def create(chat_id, time, text, expired=False, done=False):
     logger.info("Creating remind...")
     # Create a new session
     session = Session()
@@ -42,7 +42,7 @@ def create_remind(chat_id, time, text, expired=False, done=False):
     session.close()
 
 
-def update_remind(chat_id, id, time, text):
+def update(chat_id, id, time, text):
     logger.info("Updating remind...")
     session = Session()
     session.query(Remind).filter_by(chat_id=chat_id).filter_by(id=id).one().update({"remind_time": parse(time), "remind_text": text})
@@ -103,7 +103,7 @@ def check_remind(*time):
     session.close()
 
 
-def close_remind(user_chat_id, id):
+def close(user_chat_id, id):
     logger.info("Closing reminds...")    
     session = Session()
     current_time=datetime.datetime.now().strftime(DATETIME_FORMAT)
@@ -121,7 +121,7 @@ def close_remind(user_chat_id, id):
     session.close()
 
 
-def delete_remind(delete_id, chat_id):
+def delete(delete_id, chat_id):
     logger.info("Deleting reminds...")
     session = Session()
     for i in delete_id:
