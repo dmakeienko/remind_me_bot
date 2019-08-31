@@ -120,10 +120,10 @@ def main():
   dispatcher.add_handler(list_handler)
 
   # Remind
-  j.run_repeating(remind, interval=20,  first=0)
-  j.run_repeating(remind_1, interval=20,  first=0)
-  j.run_repeating(remind_2, interval=20,  first=0)
-  j.run_repeating(check_expired, interval=30,  first=0)
+  j.run_repeating(remind, interval=60,  first=0)
+  j.run_repeating(remind_1, interval=60,  first=0)
+  j.run_repeating(remind_2, interval=60,  first=0)
+  j.run_repeating(check_expired, interval=60,  first=0)
   
   # Delete
   delete_handler = CommandHandler('rm', delete, pass_args=True)

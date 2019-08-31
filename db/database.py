@@ -82,8 +82,8 @@ def check_remind(*time):
     if not time:
         remind_time = current_time
         remind = session.query(Remind).filter_by(remind_time=remind_time).filter_by(expired=False).filter_by(done=False).all()
-    elif time:
-        if time[0] <= 3:
+    else:
+        if time[0] <= EXPIRED_REMIND_TIME:
             remind_time = (datetime.datetime.strptime(current_time, DATETIME_FORMAT) - datetime.timedelta(minutes=time[0])).strftime(DATETIME_FORMAT)
             remind = session.query(Remind).filter_by(remind_time=remind_time).filter_by(expired=False).filter_by(done=False).all()
             logger.info("Checking NONEXPIRED...")
