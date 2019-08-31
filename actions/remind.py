@@ -4,7 +4,7 @@ from utils.constants import EXPIRED_REMIND_TIME, SECOND_REMIND_TIME, THIRD_REMIN
 def remind(bot, job):
   if check_remind():
     for r in check_remind():
-      remind = f"Don`t forget: {r['remind_text']}\n"
+      remind = f"Remind ❗️: {r['remind_text']}\n"
       user_chat_id = r['chat_id']
 
     bot.send_message(chat_id=user_chat_id, text=remind)
@@ -16,7 +16,7 @@ def remind_1(bot, job):
   try:
     check_remind(SECOND_REMIND_TIME)
     for r in check_remind(SECOND_REMIND_TIME):
-      remind = f"Don`t forget: {r['remind_text']}\n"
+      remind = f"Remind ‼️: {r['remind_text']}\n"
       user_chat_id = r['chat_id']
 
     bot.send_message(chat_id=user_chat_id, text=remind)
@@ -27,7 +27,7 @@ def remind_2(bot, job):
   try:
     check_remind(THIRD_REMIND_TIME)
     for r in check_remind(THIRD_REMIND_TIME):
-      remind = f"Don`t forget: {r['remind_text']}\n"
+      remind = f"Remind ⁉️: {r['remind_text']}\n"
       user_chat_id = r['chat_id']
 
     bot.send_message(chat_id=user_chat_id, text=remind)
@@ -40,7 +40,7 @@ def check_expired(bot, job):
       for r in check_remind(EXPIRED_REMIND_TIME)[1]:
         if check_remind(EXPIRED_REMIND_TIME)[0] == 'expired':
           user_chat_id = r['chat_id']
-          final_remind= 'Sorry, your task expired'
+          final_remind= 'Looks like you forget about your task 💔❌'
           bot.send_message(chat_id=user_chat_id, text=final_remind)
     except:
       return

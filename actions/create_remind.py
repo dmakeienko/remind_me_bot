@@ -10,6 +10,6 @@ def create_remind(bot, update, args):
         create(user_chat_id, time_remind, reminder_text, False)
         bot.send_message(chat_id=user_chat_id, text=remind)
     except IndexError:
-        bot.send_message(chat_id=user_chat_id, text='Oops 😯, can`t create remind. Maybe you missing your text 🤔?')
+        bot.send_message(chat_id=user_chat_id, text='Oops 😯, can`t create remind. Maybe you missing your text 🤔')
     except ValueError:
-        bot.send_message(chat_id=user_chat_id, text='Oops 😯, can`t create remind. Maybe something wrong with date/time 🤔?')
+        bot.send_message(chat_id=user_chat_id, text='Oops 😯, can`t create remind. Maybe something wrong with date/time? 🤔')

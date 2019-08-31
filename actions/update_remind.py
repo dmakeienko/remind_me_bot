@@ -8,6 +8,6 @@ def update_remind(bot, update, args):
     user_chat_id = update.message.chat_id
     try:
       update(chat_id=user_chat_id, id=remind_id, time=time_remind, text=reminder_text)
-      bot.send_message(chat_id=update.message.chat_id, text="Your remind has been changed")
+      bot.send_message(chat_id=update.message.chat_id, text="Your remind has been changed ✏️")
     except:
-      bot.send_message(chat_id=update.message.chat_id, text="Sorry, there is no remind(s) with such id")
+      bot.send_message(chat_id=update.message.chat_id, text="Sorry, there is no remind(s) with such id 😔")
