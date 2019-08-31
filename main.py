@@ -6,7 +6,6 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent
 import os
 from dotenv import load_dotenv
 from db.database import create_remind, get_reminds, expire_remind, close_remind, delete_remind, update_remind
-# from jobs.check import *
 from actions.remind import remind, remind_1, remind_2, check_expired
 
 
@@ -125,6 +124,7 @@ def main():
   j.run_repeating(remind_1, interval=20,  first=0)
   j.run_repeating(remind_2, interval=20,  first=0)
   j.run_repeating(check_expired, interval=30,  first=0)
+  
   # Delete
   delete_handler = CommandHandler('rm', delete, pass_args=True)
   dispatcher.add_handler(delete_handler)
