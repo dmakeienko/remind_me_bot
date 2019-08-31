@@ -32,12 +32,10 @@ def main():
   updater = Updater(token=TOKEN)
   j = updater.job_queue
   dispatcher = updater.dispatcher
-  print("Bot started")
-
   # Add command handler to dispatcher
 
   # Start
-  start_handler = CommandHandler('start',start)
+  start_handler = CommandHandler('start', start)
   dispatcher.add_handler(start_handler)
 
   # Remind
@@ -48,14 +46,14 @@ def main():
   list_handler = CommandHandler('list', list_reminds)
   dispatcher.add_handler(list_handler)
 
-  # Remind
+  # Jobs
   j.run_repeating(remind, interval=60,  first=0)
   j.run_repeating(remind_1, interval=60,  first=0)
   j.run_repeating(remind_2, interval=60,  first=0)
   j.run_repeating(check_expired, interval=60,  first=0)
   
   # Delete
-  delete_handler = CommandHandler('rm', delete_remind, pass_args=True)
+  delete_handler = CommandHandler('delete', delete_remind, pass_args=True)
   dispatcher.add_handler(delete_handler)
 
   # Done
