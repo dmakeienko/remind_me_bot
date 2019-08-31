@@ -15,7 +15,7 @@ load_dotenv()
 logger = logging.getLogger('database')
 
 
-engine = create_engine(os.environ['DB_URL'])
+engine = create_engine(os.environ['DB_URL'], pool_size=20, max_overflow=100)
 Session = sessionmaker(bind=engine)
 
 Base = declarative_base()
@@ -74,7 +74,8 @@ def update_remind(chat_id, id, time, text):
 
 def expire_remind(delete_id):
     session = Session()
-    session.query(Remind).filter_by(id=delete_id).update({"expired": True}, synchronize_session=False)
+    for i in delete_id:
+        session.query(Remind).filter_by(id=i.id).update({"expired": True}, synchronize_session=False)
 
     # Commit and close session
     session.commit()
@@ -103,18 +104,21 @@ def check_remind(*time):
         remind_time = current_time
         remind = session.query(Remind).filter_by(remind_time=remind_time).filter_by(expired=False).filter_by(done=False).all()
     elif time:
-        if time[0] < 3:
+        if time[0] <= 3:
             remind_time = (datetime.datetime.strptime(current_time, datetimeFormat) - datetime.timedelta(minutes=time[0])).strftime(datetimeFormat)
             remind = session.query(Remind).filter_by(remind_time=remind_time).filter_by(expired=False).filter_by(done=False).all()
+            logger.info("Checking NONEXPIRED...")
         else:
+            delta = (datetime.datetime.strptime(current_time, datetimeFormat) - datetime.timedelta(minutes=time[0])).strftime(datetimeFormat)
+            print('delta ' + delta)
+            remind = session.query(Remind).filter_by(expired=False).filter_by(done=False).filter(Remind.remind_time <= delta).all()
             remind_j = json.loads(json.dumps(remind, cls=RemindEncoder, indent=4))
-            expire_remind(remind.id)
+            expire_remind(remind)
             return 'expired', remind_j
 
     remind_j = json.loads(json.dumps(remind, cls=RemindEncoder, indent=4))
     if remind_j: 
         return remind_j
-
     # Close session
     session.close()
 
