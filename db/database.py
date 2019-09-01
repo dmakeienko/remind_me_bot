@@ -126,7 +126,9 @@ def delete(delete_id, chat_id):
     logger.info("Deleting reminds...")
     session = Session()
     for i in delete_id:
-        session.query(Remind).filter_by(id=i).filter_by(chat_id=chat_id).one().delete(synchronize_session=False)
+        deleted_remind = session.query(Remind).filter_by(chat_id=chat_id, id=i).delete(synchronize_session=False)
+        if delete_id == 0:
+            raise Exception
 
     # Commit and close session
     session.commit()
