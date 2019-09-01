@@ -6,8 +6,9 @@ from actions.remind import remind, remind_1, remind_2, check_expired
 from actions.start import start
 from actions.unknown import unknown
 from actions.update_remind import update_remind
-from dotenv import load_dotenv
 from actions.feedback import feedback
+from actions.help import help_remind
+from dotenv import load_dotenv
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import datetime
@@ -68,7 +69,11 @@ def main():
   # Feedback
   feedback_remind_handler = CommandHandler('feedback', feedback, pass_args=True)
   dispatcher.add_handler(feedback_remind_handler)
-
+  
+  # Help
+  help_remind_handler = CommandHandler('help', help_remind)
+  dispatcher.add_handler(help_remind_handler)
+  
   # Always should be last
   unknown_handler = MessageHandler(Filters.command, unknown)
   dispatcher.add_handler(unknown_handler)
