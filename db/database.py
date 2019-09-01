@@ -42,10 +42,11 @@ def create(chat_id, time, text, expired=False, done=False):
     session.close()
 
 
-def update(chat_id, id, time, text):
+def _update(chat_id, id, time, text):
     logger.info("Updating remind...")
     session = Session()
-    session.query(Remind).filter_by(chat_id=chat_id).filter_by(id=id).one().update({"remind_time": parse(time), "remind_text": text})
+    new_time = parse(time)
+    session.query(Remind).filter_by(chat_id=chat_id, id=id).update({"remind_time": new_time, "remind_text": text})
     
     # Commit and close session
     session.commit()
