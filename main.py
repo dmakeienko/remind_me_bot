@@ -43,7 +43,7 @@ def main():
   dispatcher.add_handler(set_remind_handler)
   
   # List
-  list_handler = CommandHandler('list', list_reminds)
+  list_handler = CommandHandler('list', list_reminds, pass_args=True)
   dispatcher.add_handler(list_handler)
 
   # Jobs

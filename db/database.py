@@ -1,7 +1,7 @@
 from dateutil.parser import parse
 from db.Remind import Remind, Base
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, Column, Integer, String, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, cast, Date
 from sqlalchemy import desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -56,23 +56,32 @@ def _update(chat_id, id, time, text):
 def expire_remind(delete_id):
     session = Session()
     for i in delete_id:
-        session.query(Remind).filter_by(id=i.id).update({"expired": True}, synchronize_session=False)
+        session.query(Remind).filter_by(id=i.id, done=False).update({"expired": True}, synchronize_session=False)
 
     # Commit and close session
     session.commit()
     session.close()
 
 
-def get_reminds(user_chat_id):
+def get_reminds(user_chat_id, interval):
     logger.info("Getting reminds...")
     session = Session()
-    # Select all reminds with done == False, user is defined by chat_id
-    reminds_list = session.query(Remind).filter_by(chat_id=user_chat_id).order_by(Remind.id).filter_by(done=False).all()
+    if interval == '':
+        print('nothing')
+        reminds_list = session.query(Remind).filter_by(chat_id=user_chat_id).\
+            filter(cast(Remind.remind_time, Date) == datetime.datetime.today().date() ).\
+                order_by(Remind.id).all()
+        json_data = json.loads(json.dumps(reminds_list, cls=RemindEncoder, indent=4))
+    elif interval == 'all':
+        print('all')
+        # Select all reminds, user is defined by chat_id
+        reminds_list = session.query(Remind).filter_by(chat_id=user_chat_id).order_by(Remind.id).all()
+
     json_data = json.loads(json.dumps(reminds_list, cls=RemindEncoder, indent=4))
-    
     # Close session
     session.close()
-    return json_data
+    if json_data:
+        return json_data
 
 
 def check_remind(*time):
