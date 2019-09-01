@@ -12,8 +12,10 @@ def list_reminds(bot, update):
         remind_status = '🕖'
       elif r['expired'] == True:
         remind_status = '❌'
+      elif r['done'] == True:
+        remind_status = '✅'
       time = datetime.strptime(r['remind_time'], DATETIME_FORMAT).strftime('%d.%m %H:%M')
-      my_reminds += f"{r['id']}: ⏰ {time} 📌 {r['remind_text']}: {remind_status}\n"
+      my_reminds += f"🗓 {r['id']}: ⏰ {time} 📌 {r['remind_text']}: {remind_status}\n"
   else: 
     my_reminds = 'Oops 😯, you have no reminds yet.'
 

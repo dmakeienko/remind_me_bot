@@ -9,5 +9,5 @@ def delete_remind(bot, update, args):
     except:
       bot.send_message(chat_id=update.message.chat_id, text="Sorry, there is no remind(s) with such id 😔")
   elif not args:
-    bot.send_message(chat_id=update.message.chat_id, text="Oops, you forgot to specify id(s)")
+    bot.send_message(chat_id=update.message.chat_id, text="Oops 😯, you forgot to specify id(s). Please, try again.")
   
