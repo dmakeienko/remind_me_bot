@@ -7,6 +7,7 @@ from actions.start import start
 from actions.unknown import unknown
 from actions.update_remind import update_remind
 from dotenv import load_dotenv
+from actions.feedback import feedback
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import datetime
@@ -63,6 +64,10 @@ def main():
   # Update
   update_remind_handler = CommandHandler('update', update_remind, pass_args=True)
   dispatcher.add_handler(update_remind_handler)
+
+  # Feedback
+  feedback_remind_handler = CommandHandler('feedback', feedback, pass_args=True)
+  dispatcher.add_handler(feedback_remind_handler)
 
   # Always should be last
   unknown_handler = MessageHandler(Filters.command, unknown)
