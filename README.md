@@ -15,3 +15,7 @@ Create `.env` file and add token:
 ```
     TELEGRAM_TOKEN="your_obtained_token"
 ```
+
+## License
+
+Licensed under Apache 2.0. See file LICENSE
