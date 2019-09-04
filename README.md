@@ -1,6 +1,7 @@
 # README
 
 This is a RemindMe Bot. It will help you remember important things through Telegram.
+You can add this bot at Telegram as @how_to_find_name_for_bot or by the [link](https://t.me/how_to_find_name_for_bot)
 
 ![Interface](media/bot.png)
 
