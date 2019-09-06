@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Boolean, cast, Da
 from sqlalchemy import desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from utils.constants import DATETIME_FORMAT, LAST_REMIND_TIME, LIST_ALL_FLAG, LIST_MONTH_FLAG, LIST_WEEK_FLAG
+from utils.constants import DATETIME_FORMAT, LAST_REMIND_TIME, LIST_ALL_FLAG, LIST_WEEK_FLAG
 import datetime 
 import json
 import logging
@@ -46,7 +46,7 @@ def _update(chat_id, id, time, text):
     logger.info("Updating remind...")
     session = Session()
     new_time = parse(time)
-    session.query(Remind).filter_by(chat_id=chat_id, id=id).update({"remind_time": new_time, "remind_text": text})
+    session.query(Remind).filter_by(chat_id=chat_id, id=id).update({"remind_time": new_time, "remind_text": text, "expired": "false"})
     
     # Commit and close session
     session.commit()

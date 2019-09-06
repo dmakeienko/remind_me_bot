@@ -1,6 +1,6 @@
 from db.database import get_reminds
 from datetime import datetime
-from utils.constants import DATETIME_FORMAT, LIST_ALL_FLAG, LIST_MONTH_FLAG, LIST_WEEK_FLAG
+from utils.constants import DATETIME_FORMAT, LIST_ALL_FLAG, LIST_WEEK_FLAG
 
 def list_reminds(bot, update, args):
   my_reminds = ''
