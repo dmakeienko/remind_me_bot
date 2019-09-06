@@ -2,12 +2,12 @@ version: '3.7'
 
 services:
 
-  bot:
-    build: .
-    container_name: bot
-    volumes:
-      - "./:/opt/app"
-    restart: on-failure
+  # bot:
+  #   build: .
+  #   container_name: bot
+  #   volumes:
+  #     - "./:/opt/app"
+  #   restart: on-failure
 
   db:
     image: postgres:11
