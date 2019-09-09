@@ -3,7 +3,7 @@ stages:
   - deploy
 
 variables:
-  IMAGE_TAG: $CI_COMMIT_SHA
+  IMAGE_TAG: $CI_COMMIT_TAG
 
 before_script:
   - eval $(/usr/bin/aws ecr get-login --no-include-email --region=$AWS_REGION)
@@ -14,7 +14,7 @@ build_image:
     - docker build -t $BOT_REPO:$IMAGE_TAG .
     - docker push $BOT_REPO:$IMAGE_TAG
   only: 
-    - deploy
+    - tags
   
 
 deploy:
@@ -22,4 +22,4 @@ deploy:
   script: 
     - export TAG=$IMAGE_TAG; docker stack deploy --with-registry-auth -c stack.yml remind_bot
   only: 
-    - deploy
+    - tags
