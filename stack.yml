@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+
+  bot:
+    image: 036291388481.dkr.ecr.eu-central-1.amazonaws.com/remind_me_bot:${TAG}
+    restart: on-failure
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+
+networks:
+  internal:
