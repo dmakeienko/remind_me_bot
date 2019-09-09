@@ -3,17 +3,16 @@ stages:
   - deploy
 
 variables:
-  BOT_REPO: 036291388481.dkr.ecr.eu-central-1.amazonaws.com/remind_me_bot
-  TAG: $CI_COMMIT_TAG
+  IMAGE_TAG: $CI_COMMIT_TAG
 
 before_script:
-  - eval $(aws ecr get-login --no-include-email --region=$AWS_REGION)
+  - eval $(/usr/bin/aws ecr get-login --no-include-email --region=$AWS_REGION)
 
 build_image:
   stage: build
   script: 
-    - docker build -t $BOT_REPO:$TAG .
-    - docker push $BOT_REPO:$TAG
+    - docker build -t $BOT_REPO:$IMAGE_TAG .
+    - docker push $BOT_REPO:$IMAGE_TAG
   only: 
     - tags
   
@@ -21,6 +20,6 @@ build_image:
 deploy:
   stage: deploy
   script: 
-    - export $TAG; docker stack deploy --with-registry-auth -c $HOME/stack.yml remind_bot
+    - export TAG=$IMAGE_TAG; docker stack deploy --with-registry-auth -c stack.yml remind_bot
   only: 
     - tags

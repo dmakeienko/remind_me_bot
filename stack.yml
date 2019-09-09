@@ -7,6 +7,10 @@ services:
     restart: on-failure
     networks:
       - internal
+    environment:
+      DB_URL: ${DB_URL}
+      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+      ADMIN_CHAT_ID: ${ADMIN_CHAT_ID}
     deploy:
       replicas: 1
       update_config:
