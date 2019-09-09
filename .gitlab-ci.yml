@@ -12,7 +12,7 @@ before_script:
 build_image:
   stage: build
   script: 
-    - docker build -t $BOT_REPO:$TAG
+    - docker build -t $BOT_REPO:$TAG .
     - docker push $BOT_REPO:$TAG
   only: 
     - tags
@@ -21,6 +21,6 @@ build_image:
 deploy:
   stage: deploy
   script: 
-    - export $TAG; docker stack deploy --with-registry-auth -c stack.yml remind_bot
+    - export $TAG; docker stack deploy --with-registry-auth -c $HOME/stack.yml remind_bot
   only: 
     - tags
