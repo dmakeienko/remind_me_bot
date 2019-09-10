@@ -37,8 +37,10 @@ def create(chat_id, time, text, expired=False, done=False):
     # Create a new session
     session = Session()
     parsed_time = parse(time)
-    today=datetime.datetime.today().strftime('%Y-%m-%d %H:00:00')
-    if parsed_time >= today: 
+    today=datetime.datetime.today().strftime('%Y-%m-%d %H:%M:00')
+    print(today)
+    print(parsed_time)
+    if parsed_time > parse(today): 
         remind = Remind(chat_id, parsed_time, text, expired, done)
         session.add(remind)
         # Commit and close session
