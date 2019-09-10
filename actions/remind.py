@@ -40,7 +40,7 @@ def check_expired(bot, job):
       for r in check_remind(EXPIRED_REMIND_TIME)[1]:
         if check_remind(EXPIRED_REMIND_TIME)[0] == 'expired':
           user_chat_id = r['chat_id']
-          final_remind= f"Looks like you forgot about your task: ({r['id']}) 💔❌\nIt's expired now."
+          final_remind= f"Looks like you forgot about your task ({r['id']}): \"{r['remind_text']}\" 💔\nIt's expired now ❌."
           bot.send_message(chat_id=user_chat_id, text=final_remind)
     except:
       return
