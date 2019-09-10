@@ -141,7 +141,7 @@ def close(user_chat_id, id):
     # Commit and close session
     session.commit()
     session.close()
-
+    return id
 
 def delete(delete_id, chat_id):
     logger.info("Deleting reminds...")
@@ -155,3 +155,14 @@ def delete(delete_id, chat_id):
     session.commit()
     session.close()
 
+
+def _get_remind(user_chat_id, id):
+    logger.info("get specific remind")
+    session = Session()
+    for i in id:
+        remind = session.query(Remind).filter_by(chat_id=user_chat_id, id=i).all()
+    
+    remind_j = json.loads(json.dumps(remind, cls=RemindEncoder))
+    session.close()
+    if remind_j:
+        return remind_j
