@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Boolean, cast, Da
 from sqlalchemy import desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from utils.constants import DATETIME_FORMAT, LAST_REMIND_TIME, LIST_ALL_FLAG, LIST_WEEK_FLAG
+from utils.constants import DATETIME_FORMAT, LAST_REMIND_TIME, LIST_ALL_FLAG, LIST_WEEK_FLAG, START_WEEK_FORMAT, END_WEEK_FORMAT
 import datetime 
 import json
 import logging
@@ -19,6 +19,8 @@ logger = logging.getLogger('database')
 engine = create_engine(os.environ['DB_URL'], pool_size=20, max_overflow=100)
 Session = sessionmaker(bind=engine)
 
+# Detailed query logging
+if os.getenv('DEBUG'): logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 class RemindEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -77,8 +79,8 @@ def get_reminds(user_chat_id, interval):
     elif interval ==  LIST_WEEK_FLAG:
         today = datetime.datetime.today()
         weekday = today.weekday()
-        mon = today - datetime.timedelta(days=weekday)
-        sun = today + datetime.timedelta(days=(6 - weekday))
+        mon = (today - datetime.timedelta(days=weekday)).strftime(START_WEEK_FORMAT)
+        sun = (today + datetime.timedelta(days=(6 - weekday))).strftime(END_WEEK_FORMAT)
         reminds_list = session.query(Remind).filter_by(chat_id=user_chat_id).\
             filter(cast(Remind.remind_time, Date) >= mon, cast(Remind.remind_time, Date) <= sun ).\
                 order_by(Remind.remind_time).all()
