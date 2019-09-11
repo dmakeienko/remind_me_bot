@@ -1,3 +1,4 @@
+from actions.about import about
 from actions.close_remind import close_remind
 from actions.create_remind import create_remind, create_tomorrow, create_today
 from actions.delete_remind import delete_remind
@@ -82,6 +83,10 @@ def main():
   help_remind_handler = CommandHandler('help', help_remind)
   dispatcher.add_handler(help_remind_handler)
   
+  # Help
+  about_remind_handler = CommandHandler('about', about)
+  dispatcher.add_handler(about_remind_handler)
+
   # Always should be last
   unknown_handler = MessageHandler(Filters.command, unknown)
   dispatcher.add_handler(unknown_handler)
