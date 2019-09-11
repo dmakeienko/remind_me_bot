@@ -1,5 +1,5 @@
 from actions.close_remind import close_remind
-from actions.create_remind import create_remind
+from actions.create_remind import create_remind, create_tomorrow, create_today
 from actions.delete_remind import delete_remind
 from actions.list_reminds import list_reminds
 from actions.remind import remind, remind_1, remind_2, check_expired
@@ -40,10 +40,18 @@ def main():
   start_handler = CommandHandler('start', start)
   dispatcher.add_handler(start_handler)
 
-  # Remind
-  set_remind_handler = CommandHandler('remind', create_remind, pass_args=True)
-  dispatcher.add_handler(set_remind_handler)
+  # Create Remind
+  create_remind_handler = CommandHandler('remind', create_remind, pass_args=True)
+  dispatcher.add_handler(create_remind_handler)
   
+  # Create Remind for today
+  create_remind_today_handler = CommandHandler(['today', 'ty', 'at' 'сегодня', 'cьогодні'], create_today, pass_args=True)
+  dispatcher.add_handler(create_remind_today_handler)
+
+  # Create Remind for tomorrow
+  create_remind_tomorrow_handler = CommandHandler(['tomorrow', 'tw', 'завтра'], create_tomorrow, pass_args=True)
+  dispatcher.add_handler(create_remind_tomorrow_handler)
+
   # List
   list_handler = CommandHandler('list', list_reminds, pass_args=True)
   dispatcher.add_handler(list_handler)
@@ -55,7 +63,7 @@ def main():
   j.run_repeating(check_expired, interval=60,  first=0)
   
   # Delete
-  delete_handler = CommandHandler('delete', delete_remind, pass_args=True)
+  delete_handler = CommandHandler(['delete', 'rm'], delete_remind, pass_args=True)
   dispatcher.add_handler(delete_handler)
 
   # Done
