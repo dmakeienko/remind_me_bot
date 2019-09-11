@@ -131,19 +131,20 @@ def close(user_chat_id, id):
     logger.info("Closing reminds...")    
     session = Session()
     current_time=datetime.datetime.now().strftime(DATETIME_FORMAT)
+    # Need to make it work properly
     if not id:
-        # TODO 
-        # check if last remind exists
         remind = session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(done=False).filter(Remind.remind_time <= current_time).order_by(desc(Remind.remind_time)).first()
         if remind is not None:
             session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(id=remind.id).update({"done": True}, synchronize_session=False)
+            remind_id = remind.id
     else:
         for i in id:
             session.query(Remind).filter_by(chat_id=user_chat_id).filter_by(id=i).update({"done": True}, synchronize_session=False)
+        remind_id = id
     # Commit and close session
     session.commit()
     session.close()
-    return id
+    return remind_id
 
 def delete(delete_id, chat_id):
     logger.info("Deleting reminds...")
@@ -161,9 +162,12 @@ def delete(delete_id, chat_id):
 def _get_remind(user_chat_id, id):
     logger.info("get specific remind")
     session = Session()
-    for i in id:
-        remind = session.query(Remind).filter_by(chat_id=user_chat_id, id=i).all()
-    
+    # Need to make it work properly
+    if isinstance(id, list):
+        for i in id:
+            remind = session.query(Remind).filter_by(chat_id=user_chat_id, id=i).all()
+    else:
+        remind = session.query(Remind).filter_by(chat_id=user_chat_id, id=id).all()
     remind_j = json.loads(json.dumps(remind, cls=RemindEncoder))
     session.close()
     if remind_j:
