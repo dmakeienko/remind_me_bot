@@ -5,6 +5,7 @@ from actions.delete_remind import delete_remind
 from actions.list_reminds import list_reminds
 from actions.remind import remind, remind_1, remind_2, check_expired
 from actions.start import start
+from actions.postpone import postpone
 from actions.unknown import unknown
 from actions.update_remind import update_remind
 from actions.feedback import feedback
@@ -74,6 +75,10 @@ def main():
   # Update
   update_remind_handler = CommandHandler('update', update_remind, pass_args=True)
   dispatcher.add_handler(update_remind_handler)
+
+  # Update
+  postpone_remind_handler = CommandHandler('postpone', postpone, pass_args=True)
+  dispatcher.add_handler(postpone_remind_handler)
 
   # Feedback
   feedback_remind_handler = CommandHandler('feedback', feedback, pass_args=True)

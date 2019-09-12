@@ -38,8 +38,6 @@ def create(chat_id, time, text, expired=False, done=False):
     session = Session()
     parsed_time = parse(time)
     today=datetime.datetime.today().strftime('%Y-%m-%d %H:%M:00')
-    print(today)
-    print(parsed_time)
     if parsed_time > parse(today): 
         remind = Remind(chat_id, parsed_time, text, expired, done)
         session.add(remind)
@@ -55,6 +53,16 @@ def _update(chat_id, id, time, text):
     session = Session()
     new_time = parse(time)
     session.query(Remind).filter_by(chat_id=chat_id, id=id).update({"remind_time": new_time, "remind_text": text, "expired": False})
+    
+    # Commit and close session
+    session.commit()
+    session.close()
+
+
+def _update_time(chat_id, id, new_time):
+    logger.info("Updating remind time...")
+    session = Session()
+    session.query(Remind).filter_by(chat_id=chat_id, id=id).update({"remind_time": parse(new_time)})
     
     # Commit and close session
     session.commit()
@@ -172,3 +180,18 @@ def _get_remind(user_chat_id, id):
     session.close()
     if remind_j:
         return remind_j
+
+
+def _get_last_remind(chat_id, *id):
+    session = Session()
+    current_time=datetime.datetime.now().strftime(DATETIME_FORMAT)
+    if not id:
+        remind = session.query(Remind).filter_by(chat_id=chat_id).filter_by(done=False, expired=False).filter(Remind.remind_time <= current_time).order_by(desc(Remind.remind_time)).first()
+    elif id:
+        remind = session.query(Remind).filter_by(chat_id=chat_id).filter_by(id=id)
+    if remind is not None:
+        # Close session
+        session.close()
+        remind_j = json.loads(json.dumps(remind, cls=RemindEncoder))
+        if remind_j:
+            return remind_j

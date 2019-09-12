@@ -11,3 +11,5 @@ END_WEEK_FORMAT = '%Y-%m-%d 23:59:00'
 # List flags
 LIST_ALL_FLAG = 'all'
 LIST_WEEK_FLAG = 'week'
+
+HOUR = 60
