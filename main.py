@@ -77,7 +77,7 @@ def main():
   dispatcher.add_handler(update_remind_handler)
 
   # Update
-  postpone_remind_handler = CommandHandler('postpone', postpone, pass_args=True)
+  postpone_remind_handler = CommandHandler(['postpone', 'snooze', 'pp'], postpone, pass_args=True)
   dispatcher.add_handler(postpone_remind_handler)
 
   # Feedback
