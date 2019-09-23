@@ -37,7 +37,6 @@ def create(chat_id, time, text, expired=False, done=False):
     # Create a new session
     session = Session()
     parsed_time = parse(time, dayfirst=True)
-    print(parsed_time)
     today=datetime.datetime.today().strftime('%Y-%m-%d %H:%M:00')
     if parsed_time > parse(today): 
         remind = Remind(chat_id, parsed_time, text, expired, done)
@@ -52,7 +51,7 @@ def create(chat_id, time, text, expired=False, done=False):
 def _update(chat_id, id, time, text):
     logger.info("Updating remind...")
     session = Session()
-    new_time = parse(time)
+    new_time = parse(time, dayfirst=True)
     session.query(Remind).filter_by(chat_id=chat_id, id=id).update({"remind_time": new_time, "remind_text": text, "expired": False})
     
     # Commit and close session
