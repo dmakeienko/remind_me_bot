@@ -36,7 +36,8 @@ def create(chat_id, time, text, expired=False, done=False):
     logger.info("Creating remind...")
     # Create a new session
     session = Session()
-    parsed_time = parse(time)
+    parsed_time = parse(time, dayfirst=True)
+    print(parsed_time)
     today=datetime.datetime.today().strftime('%Y-%m-%d %H:%M:00')
     if parsed_time > parse(today): 
         remind = Remind(chat_id, parsed_time, text, expired, done)
