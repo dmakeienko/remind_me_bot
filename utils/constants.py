@@ -13,3 +13,18 @@ LIST_ALL_FLAG = 'all'
 LIST_WEEK_FLAG = 'week'
 
 HOUR = 60
+
+### Callback data
+
+# LIST_BUTTON
+LIST_ALL_BUTTON= 'list_all'
+LIST_WEEK_BUTTON = 'week'
+LIST_10_BUTTON = 'list_10'
+LIST_30_BUTTON = 'list_30'
+
+# DONE_BUTTON
+DONE_BUTTON = 'done'
+
+# POSTPONE_BUTTON
+POSTPONE_30M_BUTTON = 'postpone_30m'
+POSTPONE_1H_BUTTON = 'postpone_1h'
