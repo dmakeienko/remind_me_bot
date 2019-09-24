@@ -12,12 +12,12 @@ from actions.feedback import feedback
 from actions.help import help_remind
 from dotenv import load_dotenv
 from telegram import InlineQueryResultArticle, InputTextMessageContent
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 import datetime
 import json
 import logging
 import os
-
+from actions.menu import button
 
 load_dotenv()
 
@@ -88,9 +88,12 @@ def main():
   help_remind_handler = CommandHandler('help', help_remind)
   dispatcher.add_handler(help_remind_handler)
   
-  # Help
+  # About
   about_remind_handler = CommandHandler('about', about)
   dispatcher.add_handler(about_remind_handler)
+  
+  #Callback for menu
+  updater.dispatcher.add_handler(CallbackQueryHandler(button))
 
   # Always should be last
   unknown_handler = MessageHandler(Filters.command, unknown)

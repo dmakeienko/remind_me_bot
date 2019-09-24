@@ -1,5 +1,6 @@
 from db.database import check_remind
 from utils.constants import EXPIRED_REMIND_TIME, SECOND_REMIND_TIME, THIRD_REMIND_TIME
+from actions.menu import remind_button_menu
 
 def remind(bot, job):
   if check_remind():
@@ -8,6 +9,7 @@ def remind(bot, job):
       user_chat_id = r['chat_id']
 
     bot.send_message(chat_id=user_chat_id, text=remind)
+    remind_button_menu(bot, user_chat_id)
   else:
     return
 
