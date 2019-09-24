@@ -98,6 +98,8 @@ def get_reminds(user_chat_id, interval):
         reminds_list = session.query(Remind).filter_by(chat_id=user_chat_id).\
             filter(cast(Remind.remind_time, Date) >= mon, cast(Remind.remind_time, Date) <= sun ).\
                 order_by(Remind.remind_time).all()
+    elif interval.isdigit():
+        reminds_list = session.query(Remind).filter_by(chat_id=user_chat_id).order_by(desc(Remind.remind_time)).limit(interval).all()
 
     json_data = json.loads(json.dumps(reminds_list, cls=RemindEncoder, indent=4))
     # Close session
