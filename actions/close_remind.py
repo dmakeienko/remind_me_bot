@@ -16,7 +16,7 @@ def close_remind(bot, update, args):
       bot.send_message(chat_id=update.message.chat_id, text="Sorry, there is no remind(s) with such id(s) 😔")
 
 
-def close_remind(bot, chat_id):  
+def close_remind_button(bot, chat_id):  
   try: 
       closed_id = close(chat_id, '')
       for r in _get_remind(chat_id, closed_id):
