@@ -2,6 +2,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from utils.menu import build_menu
 from actions.close_remind import close_remind_button
 from actions.postpone import postpone_30, postpone_1h
+from actions.list_reminds import button_list_reminds
 
 def remind_button_menu(bot, chat_id):
     button_list = [
@@ -13,19 +14,16 @@ def remind_button_menu(bot, chat_id):
     bot.send_message(chat_id=chat_id, text="What should I do with remind?🤔", reply_markup=reply_markup)
 
 
-
 def button(bot, update):
     query = update.callback_query
     data = update.callback_query.data
-    print('---qury----------------')
-    print(query) 
-    print('-------data------------')
-    print(data)
-    print('-------------------')
     chat_id = query.message.chat.id
-    print('chat_id= ' + str(chat_id))
-    if data == 'list':
-        print('list button')
+    if data == 'list_week':
+        button_list_reminds(bot, chat_id, 'week')
+    elif data == 'list_10':
+        button_list_reminds(bot, chat_id, '10')
+    elif data == 'list_30':
+        button_list_reminds(bot, chat_id, '10')
     elif data == 'done':
         close_remind_button(bot, chat_id)
     elif data == 'postpone_30m':
