@@ -22,6 +22,7 @@ def remind_1(bot, job):
       user_chat_id = r['chat_id']
 
     bot.send_message(chat_id=user_chat_id, text=remind)
+    remind_button_menu(bot, user_chat_id)
   except:
     return
 
@@ -33,6 +34,7 @@ def remind_2(bot, job):
       user_chat_id = r['chat_id']
 
     bot.send_message(chat_id=user_chat_id, text=remind)
+    remind_button_menu(bot, user_chat_id)
   except:
     return
 

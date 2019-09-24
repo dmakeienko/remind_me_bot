@@ -15,15 +15,17 @@ def remind_button_menu(bot, chat_id):
 def button(bot, update):
     query = update.callback_query
     data = update.callback_query.data
-    print('-------------------')
+    print('---qury----------------')
     print(query) 
-    print('-------------------')
+    print('-------data------------')
     print(data)
     print('-------------------')
+    chat_id = query.message.chat.id
+    print('chat_id= ' + str(chat_id))
     if data == 'list':
         print('list button')
     elif data == 'done':
-        close_remind(bot, update)
+        close_remind(bot, chat_id)
     elif data == 'postpone':
         print('postpone button')
 
