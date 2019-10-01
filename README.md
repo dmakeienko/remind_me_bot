@@ -3,34 +3,19 @@
 This is a RemindMe Bot. It will help you remember important things through Telegram.
 You can add this bot at Telegram as @how_to_find_name_for_bot or by the [link](https://t.me/how_to_find_name_for_bot)
 
-![Interface](media/bot.png)
-
 ## Available commands
 
-```
-To create remind use:
-/remind 10.01 12:00 visit to doctor
+![Help](media/bot.png)
 
-To show all reminds for today, use:
-/list 
 
-If you want to list all reminds, use:
-/list all
+## Interface
 
-To mark remind as 'Done', use
-/done - it will close last remind, 
-or use:
-/done 123, where '123' is id of Remind
+### Remind
+![Remind](media/remind.png)
 
-To update remind, try to use:
-/update 123 01.10 22:00 review schedule
+### List (today)
+![List](media/list.png)
 
-To delete remind, use:
-/delete 123, where '123' is id of Remind
-
-To send feedback
-/feedback text
-```
 
 # Installing
 
