@@ -10,7 +10,7 @@ services:
     restart: on-failure
     environment:
       ADMIN_CHAT_ID: ${ADMIN_CHAT_ID}
-      DB_URL: ${DB_URL}
+      DB_URL: ${DATABASE_url}
       TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
     env_file: 
       - ./.env
