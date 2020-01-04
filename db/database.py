@@ -16,7 +16,7 @@ load_dotenv()
 logger = logging.getLogger('database')
 
 
-engine = create_engine(os.environ['DB_URL'], pool_size=20, max_overflow=100)
+engine = create_engine(os.environ['DATABASE_URL'], pool_size=20, max_overflow=100)
 Session = sessionmaker(bind=engine)
 
 # Detailed query logging
