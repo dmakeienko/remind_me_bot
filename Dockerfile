@@ -5,5 +5,5 @@ RUN cp /usr/share/zoneinfo/Europe/Kiev /etc/localtime && echo "Europe/Kiev" >  /
 ADD . /opt/app
 WORKDIR /opt/app
 
-RUN pip install -r requirments.txt
+RUN pip install -r requirements.txt
 CMD ["python", "main.py"]

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -9,7 +9,7 @@ class Remind(Base):
     id = Column(Integer, primary_key=True)
     chat_id = Column(Integer)
     remind_time = Column(String(20))
-    remind_text = Column(String(100))
+    remind_text = Column(Text)
     expired = Column(Boolean, default=False)
     done = Column(Boolean, default=False)
 
