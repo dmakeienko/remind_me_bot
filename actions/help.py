@@ -1,4 +1,4 @@
-def help_remind(bot, update):
+def help_remind(update, context):
     text = """
 ▫️ To create remind use:
 /remind 10.01 12:00 visit a doctor
@@ -40,5 +40,5 @@ If you have any feedback, plese send it to denys.makeienko@gmail.com
 or use:
 /feedback Here is what is think about your bot
     """
-    bot.send_message(chat_id=update.message.chat_id, text=text)
-    bot.send_message(chat_id=update.message.chat_id, text=feedback_text)
+    context.bot.send_message(chat_id=update.message.chat_id, text=text)
+    context.bot.send_message(chat_id=update.message.chat_id, text=feedback_text)

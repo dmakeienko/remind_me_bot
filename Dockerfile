@@ -1,4 +1,4 @@
-FROM python:3.7-alpine3.9
+FROM python:3.8.3-alpine3.11
 
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev tzdata
 RUN cp /usr/share/zoneinfo/Europe/Kiev /etc/localtime && echo "Europe/Kiev" >  /etc/timezone

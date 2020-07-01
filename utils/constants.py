@@ -20,7 +20,7 @@ HOUR = 60
 LIST_ALL_BUTTON= 'list_all'
 LIST_WEEK_BUTTON = 'week'
 LIST_10_BUTTON = 'list_10'
-LIST_30_BUTTON = 'list_30'
+LIST_3_BUTTON = 'list_3'
 
 # DONE_BUTTON
 DONE_BUTTON = 'done'

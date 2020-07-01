@@ -1,8 +1,8 @@
 from db.database import _update
 
-def update_remind(bot, update, args):
+def update_remind(update, context):
   try:
-    user_message = ' '.join(args).split(" ", 3)
+    user_message = ' '.join(context.args).split(" ", 3)
     remind_id=user_message[0]
     time_remind = user_message[1] + " " + user_message[2]
     reminder_text = user_message[3] 

@@ -33,7 +33,7 @@ TOKEN = os.environ.get("TELEGRAM_TOKEN")
 
 def main():
   # Create Updater object and attach dispatcher to it
-  updater = Updater(token=TOKEN)
+  updater = Updater(token=TOKEN, use_context=True)
   j = updater.job_queue
   dispatcher = updater.dispatcher
   # Add command handler to dispatcher
@@ -47,11 +47,11 @@ def main():
   dispatcher.add_handler(create_remind_handler)
   
   # Create Remind for today
-  create_remind_today_handler = CommandHandler(['today', 'ty', 'at' 'сегодня', 'cьогодні'], create_today, pass_args=True)
+  create_remind_today_handler = CommandHandler('today', create_today, pass_args=True)
   dispatcher.add_handler(create_remind_today_handler)
 
   # Create Remind for tomorrow
-  create_remind_tomorrow_handler = CommandHandler(['tomorrow', 'tw', 'завтра'], create_tomorrow, pass_args=True)
+  create_remind_tomorrow_handler = CommandHandler('tomorrow', create_tomorrow, pass_args=True)
   dispatcher.add_handler(create_remind_tomorrow_handler)
 
   # List
