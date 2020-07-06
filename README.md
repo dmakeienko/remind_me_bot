@@ -1,3 +1,6 @@
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/dmakeienko/remind_me_bot?style=flat-square) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-telegram-bot) ![GitHub](https://img.shields.io/github/license/dmakeienko/remind_me_bot) 
+
+
 # README
 
 This is a RemindMe Bot. It will help you remember important things through Telegram.
@@ -23,7 +26,7 @@ This bot is created with [python-telegram-bot](https://github.com/python-telegra
 
 ## Requirments
 
- - python 3.6+
+ - python 3.5+
  - Postgresql 11+
  - python-telegram-bot library v (see in [requirments](requirments.txt))
 
